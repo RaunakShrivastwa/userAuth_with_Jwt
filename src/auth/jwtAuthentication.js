@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import User from '../model/User/User.js';
-import redisClient from '../config/redis.config.js';
 
 dotenv.config();
 
@@ -11,8 +10,6 @@ const verifyToken = async (req, res, next) => {
     return res.status(401).json({ message: 'Access denied. No token provided.' });
   }
 
-  const redisData = await redisClient.get(token);
-  if (redisData) return res.status(403).json({ Message: 'Session Closed, !!!! Create New Session' })
   try {
     const decoded = jwt.verify(token, 'ecomDev01@112');
     const user = await User.findById(decoded._id);
@@ -26,6 +23,7 @@ const verifyToken = async (req, res, next) => {
     console.error(err);
     res.status(400).json({ message: 'Invalid token' });
   }
+
 };
 
 export default verifyToken;

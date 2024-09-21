@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import cluster from 'cluster';
 import os from 'os';
 import db from './config/mongodb.config.js';
-import redisClient from './config/redis.config.js';
 import { pid } from 'process';
 import apiRouter from './router/apiRouter.js';
 

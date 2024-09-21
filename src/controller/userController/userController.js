@@ -1,6 +1,4 @@
 import User from '../../model/User/User.js';
-import redisClient from '../../config/redis.config.js';
-
 
 class userController {
     // Add user
@@ -34,30 +32,18 @@ class userController {
 
     // get Singal User
     getSingleUser = async (req, res) => {
-        const cacheKey = `User:${req.params.id}`;
         try {
-            const cachedData = await redisClient.get(cacheKey);
-
-            // check user present in cached or not
-            if (cachedData) {
-                return res.json({ message: 'from redis cached', user: JSON.parse(cachedData) });
+            const user = await User.findById(req.params.id)
+            if (!user) {
+                return res.status(501).json({ Error: 'User Doest Exist' });
             }
 
-            // If not in cache, retrieve data from MongoDB
-            const data = await User.findById(req.params.id);
-            if (!data) {
-                return res.status(404).json({ message: `Data not found with ${req.params.id}` });
-            }
-
-            redisClient.set(cacheKey, JSON.stringify(data), {
-                EX: 60,
-            });
-            return res.json(data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            return res.status(500).json({ message: 'Server error' });
+            return res.status(200).json(user);
         }
-    };
+        catch (error) {
+            return res.status(501).json({Error:`There is Error ${error}`})
+        }
+    }
 
 
     // for the update user
