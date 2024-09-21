@@ -22,7 +22,7 @@ if (cluster.isPrimary) {
         return res.json({ message: 'hello Shubham' })
     })
     app.use(expres.json());
-    const allowedOrigins = ['https://projects-shop.vercel.app']; // Replace with your React app's origin
+    const allowedOrigins = ['https://projects-shop.vercel.app']; 
 
     app.use(cors({
         origin: function (origin, callback) {
@@ -35,6 +35,8 @@ if (cluster.isPrimary) {
         credentials: true // Allow credentials like cookies or HTTP authentication headers
     }));
     app.use('/', apiRouter);
+
+    app.get('/test',(req,res)=>{return res.json({name:'shubham'})})
 
 
     app.listen(PORT, (err) => {
