@@ -5,6 +5,7 @@ import os from 'os';
 import db from './config/mongodb.config.js';
 import { pid } from 'process';
 import apiRouter from './router/apiRouter.js';
+import cors from 'cors';
 
 
 
@@ -18,11 +19,23 @@ if (cluster.isPrimary) {
     const PORT = process.env.PORT;
     const app = expres();
     app.get('/hello', (req, res) => {
-        return res.json({message:'hello Shubham'})
+        return res.json({ message: 'hello Shubham' })
     })
     app.use(expres.json());
-    app.use('/',apiRouter);
-    
+    const allowedOrigins = ['https://projects-shop.vercel.app/','http://localhost:5173']; // Replace with your React app's origin
+
+    app.use(cors({
+        origin: function (origin, callback) {
+            if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
+        credentials: true // Allow credentials like cookies or HTTP authentication headers
+    }));
+    app.use('/', apiRouter);
+
 
     app.listen(PORT, (err) => {
         if (err) {
