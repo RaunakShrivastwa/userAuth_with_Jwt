@@ -22,7 +22,7 @@ if (cluster.isPrimary) {
         return res.json({ message: 'hello Shubham' })
     })
     app.use(expres.json());
-    const allowedOrigins = ['https://projects-shop.vercel.app/','http://localhost:5173']; // Replace with your React app's origin
+    const allowedOrigins = ['https://projects-shop.vercel.app']; // Replace with your React app's origin
 
     app.use(cors({
         origin: function (origin, callback) {
