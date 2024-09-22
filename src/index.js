@@ -19,24 +19,14 @@ if (cluster.isPrimary) {
     const PORT = process.env.PORT;
     const app = expres();
     app.get('/hello', (req, res) => {
-        return res.json({ message: 'hello Shubham' })
+        return res.json({ message: 'hello Shubham ji' })
+        
     })
     app.use(expres.json());
-    const allowedOrigins = ['https://projects-shop.vercel.app']; 
-
-    app.use(cors({
-        origin: function (origin, callback) {
-            if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-                callback(null, true);
-            } else {
-                callback(new Error('Not allowed by CORS'));
-            }
-        },
-        credentials: true // Allow credentials like cookies or HTTP authentication headers
-    }));
+    app.use(cors());
     app.use('/', apiRouter);
 
-    app.get('/test',(req,res)=>{return res.json({name:'shubham'})})
+    app.get('/test',(req,res)=>{return res.json({name:'shubham',age:'122009'})})
 
 
     app.listen(PORT, (err) => {
